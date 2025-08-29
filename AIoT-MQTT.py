@@ -25,14 +25,14 @@ SETTINGS_UPDATE_TOPIC = f"iot/{DEVICE_IP_ADDRESS}/settings/update"
 # Motion Detection Configuration
 MOTION_CONFIG = {
     "enabled": True,
-    "detection_duration": 3.0,
-    "movement_threshold": 30.0,
+    "detection_duration": 1.0,
+    "movement_threshold": 15.0,
     "position_buffer_size": 30,
     "confidence_threshold": 0.5,
-    "stable_detection_frames": 8,
-    "motion_cooldown": 2.0,
-    "min_movement_points": 3,
-    "motion_sensitivity": "medium"
+    "stable_detection_frames": 5,
+    "motion_cooldown": 1.0,
+    "min_movement_points": 2,
+    "motion_sensitivity": "High"
 }
 
 if MOTION_CONFIG["motion_sensitivity"] == "low":
@@ -73,11 +73,11 @@ try:
     motion_tracker = {
         "person_positions": deque(maxlen=MOTION_CONFIG["position_buffer_size"]),
         "position_timestamps": deque(maxlen=MOTION_CONFIG["position_buffer_size"]),
-        "is_motion_detected": False,
+        "is_motion_detected": True,
         "motion_start_time": None,
         "last_motion_time": None,
-        "person_detected": False,
-        "motion_triggered": False
+        "person_detected": True,
+        "motion_triggered": True
     }
 
     if "usb" in cam_source:
@@ -316,6 +316,7 @@ try:
                     if device["state"] == 1:
                         device["instance"].off()
                         device["state"] = 0
+                        
         y_pos = 30
         for name, device in devices.items():
             mode_text = f"{name.upper()} Mode: {device['mode'].upper()}"
